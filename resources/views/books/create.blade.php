@@ -62,6 +62,10 @@
                     <td>
                         <button type="submit">Store</button>
                     </td>
+                    <td></td>
+                    <td>
+                        <button type="reset">Reset</button>
+                    </td>
                 </tr>
             </tbody>
         </table>

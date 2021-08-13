@@ -63,6 +63,10 @@
                     <td>
                         <button type="submit">Update</button>
                     </td>
+                    <td></td>
+                    <td>
+                        <button type="reset">Reset</button>
+                    </td>
                 </tr>
             </tbody>
         </table>
