@@ -1,17 +1,14 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Create Book</title>
-</head>
-<body>
+@extends('layouts.app')
+
+@section('title', 'Create Book')
+
+@section('content')
     <a href="/books">Back To Book List Page</a>
-    <h2>Form Create Page</h2>
+    <h2>Form Book Create Page</h2>
 
     <form action="/books" method="POST">
-        {{ @csrf_field() }}
+        @csrf
+
         <table>
             <tbody>
                 <tr>
@@ -70,5 +67,4 @@
             </tbody>
         </table>
     </form>
-</body>
-</html>
+@endsection

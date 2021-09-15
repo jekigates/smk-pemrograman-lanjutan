@@ -1,41 +1,40 @@
 @extends('layouts.app')
 
-@section('title', 'Books List')
+@section('title', 'Siswas List')
 
 @section('content')
     <div style="background: #388BF2; font-size: 24px; color: white;">
-        Simple Library App
+        Simple Siswa App
     </div>
 
     <div style="margin: 20px 0;">
         <table border="1">
-            <!-- <a href="/books/add">Add New Book</a> -->
-            <a href="/books/create">Add New Book</a>
+            <a href="/siswas/create">Add New Siswa</a>
 
             <thead>
                 <th>No</th>
-                <th>Title</th>
-                <th>Author</th>
-                <th>Publication</th>
-                <th>Year</th>
+                <th>NIS</th>
+                <th>Nama</th>
+                <th>Kelas</th>
+                <th>Alamat</th>
+                <th>HP</th>
                 <th>Action</th>
             </thead>
 
             <tbody>
-                @foreach ($books as $index => $book)
+                @foreach ($siswas as $index => $siswa)
                     <tr>
                         <td>{{ $index + 1 }}</td>
                         <td>
-                            <a href="{{ url('/books', $book->id) }}">{{ $book->title }}</a>
+                            <a href="{{ url('/siswas', $siswa->id) }}">{{ $siswa->nis }}</a>
                         </td>
-                        <td>{{ $book->author }}</td>
-                        <td>{{ $book->publication }}</td>
-                        <td>{{ $book->year }}</td>
+                        <td>{{ $siswa->nama }}</td>
+                        <td>{{ $siswa->kelas }}</td>
+                        <td>{{ $siswa->alamat }}</td>
+                        <td>{{ $siswa->hp }}</td>
                         <td>
-                            <a href="{{ url('/books') }}/{{ $book->id }}/edit">Edit</a>
-                        </td>
-                        <td>
-                            <form method="POST" action="/books/{{ $book->id }}">
+                            <a href="{{ url('/siswas') }}/{{ $siswa->id }}/edit">Edit</a>
+                            <form method="POST" action="/siswas/{{ $siswa->id }}" style="display: inline-block; ">
                                 {{ @csrf_field() }}
                                 {{ method_field('DELETE') }}
 
