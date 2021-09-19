@@ -42,7 +42,7 @@ class SiswaController extends Controller
             'nis' => $request->nis,
             'nama' => $request->nama,
             'kelas' => $request->kelas,
-            'alamat' => $request->kelas,
+            'alamat' => $request->alamat,
             'hp' => $request->hp,
         ]);
 
