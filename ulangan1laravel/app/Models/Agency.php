@@ -26,4 +26,6 @@ class Agency extends Model
         'marketing',
         'no_hp_marketing',
     ];
+    
+    public $timestamps = false;
 }
