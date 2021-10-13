@@ -15,8 +15,9 @@
         @csrf
         <div class="container-fluid">
             <div class="row">
-                <div class="col-12 ps-4">
-                    <a href="{{ url('/agencies') }}" class="btn btn-primary my-4">Back To Agency List</a>
+                <div class="col-12 ps-4 mt-4">
+                    <h2>Agencies Create</h2>
+                    <a href="{{ url('/agencies') }}" class="btn btn-primary mt-2 mb-4">Back To Agency List</a>
                 </div>
             </div>
             <div class="row">
@@ -41,11 +42,17 @@
                     </div>
                     <div class="form-group mb-4">
                         <label for="luas_tanah" class="form-label">Luas Tanah</label>
-                        <input type="text" name="luas_tanah" id="luas_tanah" class="form-control" placeholder="Luas Tanah">
+                        <div class="input-group mb-4">
+                            <span class="input-group-text" id="luas_tanah">m2</span>
+                            <input type="text" name="luas_tanah" id="luas_tanah" class="form-control" placeholder="Luas Tanah" aria-label="Luas Tanah" aria-describedby="luas_tanah">
+                        </div>
                     </div>
                     <div class="form-group mb-4">
                         <label for="luas_bangunan" class="form-label">Luas Bangunan</label>
-                        <input type="text" name="luas_bangunan" id="luas_bangunan" class="form-control" placeholder="Luas Bangunan">
+                        <div class="input-group mb-4">
+                            <span class="input-group-text" id="luas_bangunan">m2</span>
+                            <input type="text" name="luas_bangunan" id="luas_bangunan" class="form-control" placeholder="Luas Bangunan" aria-label="Luas Bangunan" aria-describedby="luas_bangunan">
+                        </div>
                     </div>
                     <div class="form-group mb-4">
                         <label for="lantai" class="form-label d-block">Lantai</label>
@@ -78,7 +85,10 @@
                     </div>
                     <div class="form-group mb-4">
                         <label for="listrik" class="form-label">Listrik</label>
-                        <input type="text" name="listrik" id="listrik" class="form-control" placeholder="Listrik">
+                        <div class="input-group mb-4">
+                            <span class="input-group-text" id="listrik">kWh</span>
+                            <input type="text" name="listrik" id="listrik" class="form-control" placeholder="Listrik" aria-label="Listrik" aria-describedby="listrik">
+                        </div>
                     </div>
                     <div class="form-group mb-4">
                         <label for="hadap" class="form-label">Hadap</label>
@@ -96,7 +106,10 @@
                     </div>
                     <div class="form-group mb-4">
                         <label for="harga" class="form-label">Harga</label>
-                        <input type="number" name="harga" id="harga" class="form-control" placeholder="Harga" min="0" value="0">
+                        <div class="input-group mb-4">
+                            <span class="input-group-text" id="harga">Rp</span>
+                            <input type="number" name="harga" id="harga" class="form-control" placeholder="Harga" aria-label="Harga" aria-describedby="harga">
+                        </div>
                     </div>
                     <div class="form-group mb-4">
                         <label for="marketing" class="form-label">Marketing</label>

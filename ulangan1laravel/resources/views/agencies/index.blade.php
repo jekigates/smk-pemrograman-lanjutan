@@ -14,9 +14,11 @@
     <div class="container-fluid">
         <div class="row">
             <div class="col-12 mt-4 ps-4">
-                <a href="{{ url('/agencies/create') }}" class="btn btn-primary">Create Agency</a>
+                <h2>Agencies Index</h2>
+
+                <a href="{{ url('/agencies/create') }}" class="btn btn-primary mt-2 mb-4">Create Agency</a>
   
-                <table class="table mt-4">
+                <table class="table">
                     <thead>
                         <tr class="table-dark">
                             <th>No</th>
@@ -41,34 +43,36 @@
 
                     <tbody>
                         @foreach ($agencies as $agency)
-                            <td>{{ $loop->iteration }}</td>
-                            <td>{{ $agency->status }}</td>
-                            <td>{{ $agency->jenis }}</td>
-                            <td>{{ $agency->luas_tanah }}</td>
-                            <td>{{ $agency->luas_bangunan }}</td>
-                            <td>{{ $agency->lantai }}</td>
-                            <td>{{ $agency->kamar_tidur }}</td>
-                            <td>{{ $agency->kamar_mandi }}</td>
-                            <td>{{ $agency->garasi }}</td>
-                            <td>{{ $agency->air }}</td>
-                            <td>{{ $agency->listrik }}</td>
-                            <td>{{ $agency->hadap }}</td>
-                            <td>{{ $agency->alamat }}</td>
-                            <td>{{ $agency->harga }}</td>
-                            <td>{{ $agency->marketing }}</td>
-                            <td>{{ $agency->no_hp_marketing }}</td>
-                            <td>
-                                <div class="d-grid gap-2 d-md-block">
-                                    <a href="{{ url('/agencies') }}/{{ $agency->id }}/edit" class="btn btn-info" type="button">Edit</a>
-
-                                    <form action="{{ url('/agencies') }}/{{ $agency->id }}" method="POST">
-                                        @csrf
-                                        @method('DELETE')
-
-                                        <button class="btn btn-danger" type="submit">Delete</button>
-                                    </form>
-                                </div>
-                            </td>
+                            <tr>
+                                <td>{{ $loop->iteration }}</td>
+                                <td>{{ $agency->status }}</td>
+                                <td>{{ $agency->jenis }}</td>
+                                <td>{{ $agency->luas_tanah }} <sup>m2</sup></td>
+                                <td>{{ $agency->luas_bangunan }} <sup>m2</sup></td>
+                                <td>{{ $agency->lantai }}</td>
+                                <td>{{ $agency->kamar_tidur }}</td>
+                                <td>{{ $agency->kamar_mandi }}</td>
+                                <td>{{ $agency->garasi }}</td>
+                                <td>{{ $agency->air }}</td>
+                                <td>{{ $agency->listrik }} <sup>kWh</sup></td>
+                                <td>{{ $agency->hadap }}</td>
+                                <td>{{ $agency->alamat }}</td>
+                                <td>Rp {{ $agency->harga }}</td>
+                                <td>{{ $agency->marketing }}</td>
+                                <td>{{ $agency->no_hp_marketing }}</td>
+                                <td>
+                                    <div class="d-grid gap-2 d-md-block">
+                                        <a href="{{ url('/agencies') }}/{{ $agency->id }}/edit" class="btn btn-info" type="button">Edit</a>
+    
+                                        <form action="{{ url('/agencies') }}/{{ $agency->id }}" method="POST" class="d-inline-block">
+                                            @csrf
+                                            @method('DELETE')
+    
+                                            <button class="btn btn-danger" type="submit">Delete</button>
+                                        </form>
+                                    </div>
+                                </td>
+                            </tr>
                         @endforeach
                     </tbody>
                 </table>
