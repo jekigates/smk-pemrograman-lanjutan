@@ -121,6 +121,7 @@
                     </div>
                     <div class="form-group">
                         <button type="submit" class="btn btn-primary">Store</button>
+                        <button type="reset" class="btn btn-secondary">Reset</button>
                     </div>
                 </div>
             </div>
