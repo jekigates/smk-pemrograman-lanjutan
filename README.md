@@ -5,6 +5,7 @@ Immanuel Vocational High School's assignments and tests of 'Pemrograman Lanjutan
 
 For Windows
 ```
+> cd akunt-api
 > composer install
 > php artisan migrate:fresh --seed
 > php artisan key:generate
