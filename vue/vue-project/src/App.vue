@@ -1,6 +1,6 @@
 <template>
   <div id="app">
-    <Header></Header>
+    <Header :text="text"></Header>
   </div>
 </template>
 
@@ -11,6 +11,11 @@ export default {
   name: "App",
   components: {
     Header,
+  },
+  data() {
+    return {
+      text: "Ini adalah text dari data",
+    };
   },
 };
 </script>
