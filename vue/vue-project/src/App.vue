@@ -1,15 +1,11 @@
 <template>
   <div id="app">
-    <div v-if="products.length">
-      <ul>
-        <li v-for="item in products" :key="item.id">
-          {{ item.title }} - {{ item.price }}
-        </li>
-      </ul>
-    </div>
-    <div v-else>
-      <p>No Data Found</p>
-    </div>
+    <input type="text" name="" id="" v-model="cari" />
+    <ul>
+      <li v-for="item in cariData" :key="item.id">
+        {{ item.title }} - {{ item.price }}
+      </li>
+    </ul>
   </div>
 </template>
 
@@ -18,6 +14,7 @@ export default {
   name: "App",
   data() {
     return {
+      cari: "",
       products: [],
     };
   },
@@ -29,6 +26,13 @@ export default {
       { id: 4, title: "Product 4", price: 5000 },
       { id: 5, title: "Product 5", price: 4000 },
     ];
+  },
+  computed: {
+    cariData() {
+      return this.products.filter((item) => {
+        return item.title.match(this.cari);
+      });
+    },
   },
 };
 </script>
