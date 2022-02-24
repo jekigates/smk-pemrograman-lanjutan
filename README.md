@@ -4,4 +4,4 @@ Tugas dan ulangan pelajaran Pemgoraman Lanjutan untuk murid kelas 12 jurusan TKJ
 
 ### Tutorial
 
-Langkah untuk instalasi projek bisa dilihat di file README.md pada folder framework yang kamu inginkan (laravel / vue);
+Langkah untuk instalasi projek bisa dilihat di file README.md pada folder framework yang kamu inginkan (laravel / vue).

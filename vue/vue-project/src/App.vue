@@ -1,7 +1,6 @@
 <template>
   <div id="app">
-    <h2>Nama: {{ nama }}</h2>
-    <button @click="changeName">Change Name</button>
+    <a :href="url">Go To Jeki Gates</a>
   </div>
 </template>
 
@@ -10,10 +9,7 @@ export default {
   name: "App",
   data() {
     return {
-      nama: "Jeki Gates",
-      changeName() {
-        this.nama = "Jeki Gates Liau";
-      },
+      url: "https://github.com/jekigates",
     };
   },
 };
