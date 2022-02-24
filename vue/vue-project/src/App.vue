@@ -1,6 +1,6 @@
 <template>
   <div id="app">
-    <Header :text="text"></Header>
+    <Header @changeTitle="ubahText" :text="text"></Header>
   </div>
 </template>
 
@@ -16,6 +16,11 @@ export default {
     return {
       text: "Ini adalah text dari data",
     };
+  },
+  methods: {
+    ubahText(newText) {
+      this.text = newText;
+    },
   },
 };
 </script>
