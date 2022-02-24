@@ -1,6 +1,7 @@
 <template>
   <div id="app">
-    <a :href="url">Go To Jeki Gates</a>
+    <input type="text" name="" id="" v-model="nama" />
+    {{ nama }}
   </div>
 </template>
 
@@ -9,7 +10,7 @@ export default {
   name: "App",
   data() {
     return {
-      url: "https://github.com/jekigates",
+      nama: "Jeki Gates",
     };
   },
 };
