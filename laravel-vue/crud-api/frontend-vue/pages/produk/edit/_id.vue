@@ -1,10 +1,10 @@
 <template>
   <b-container>
     <b-row class="justify-content-center">
-      <b-col cols="12 mt-4">
+      <b-col cols="12" class="mt-4">
         <b-breadcrumb :items="items"></b-breadcrumb>
       </b-col>
-      <b-col cols="12 mt-2">
+      <b-col cols="12" class="mt-2">
         <b-form @submit="onSubmit" @reset="onReset" v-if="show">
           <b-form-group
             id="input-group-nama"
@@ -14,7 +14,7 @@
             <b-form-input
               id="input-nama"
               v-model="form.nama"
-              type="name"
+              type="type"
               placeholder="Ketik nama"
               required
             ></b-form-input>
@@ -27,7 +27,7 @@
             <b-form-input
               id="input-merek"
               v-model="form.merek"
-              type="name"
+              type="text"
               placeholder="Ketik merek"
               required
             ></b-form-input>

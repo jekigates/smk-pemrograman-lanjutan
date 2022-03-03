@@ -1,15 +1,15 @@
 <template>
   <b-container>
     <b-row class="justify-content-center">
-      <b-col cols="12 mt-4">
+      <b-col cols="12" class="mt-4">
         <b-breadcrumb :items="items"></b-breadcrumb>
       </b-col>
-      <b-col cols="12 mt-2">
+      <b-col cols="12" class="mt-2">
         <NuxtLink to="/produk/create" class="btn btn-primary"
           >Tambah Produk</NuxtLink
         >
       </b-col>
-      <b-col cols="12 mt-4">
+      <b-col cols="12" class="mt-4">
         <div class="table-responsive">
           <table class="table">
             <thead class="table-primary">
