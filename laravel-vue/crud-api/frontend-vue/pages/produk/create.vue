@@ -117,12 +117,10 @@ export default {
     onSubmit(event) {
       event.preventDefault();
 
-      this.$axios
-        .post("http://127.0.0.1:8000/api/produk", this.form)
-        .then((response) => {
-          this.$swal("Selamat!", response.data.message, "success");
-          this.resetForm();
-        });
+      this.$axios.post("/api/produk", this.form).then((response) => {
+        this.$swal("Selamat!", response.data.message, "success");
+        this.resetForm();
+      });
     },
     onReset(event) {
       event.preventDefault();

@@ -72,7 +72,7 @@ export default {
   },
   methods: {
     async getProduk() {
-      this.$axios.get("http://127.0.0.1:8000/api/produk").then((response) => {
+      this.$axios.get("/api/produk").then((response) => {
         this.produks = response.data.data;
       });
     },
@@ -89,12 +89,10 @@ export default {
         cancelButtonText: "Batal",
       }).then((result) => {
         if (result.value == true) {
-          this.$axios
-            .delete(`http://127.0.0.1:8000/api/produk/${id_produk}`)
-            .then((response) => {
-              this.$swal("Selamat!", response.data.message, "success");
-              this.getProduk();
-            });
+          this.$axios.delete(`/api/produk/${id_produk}`).then((response) => {
+            this.$swal("Selamat!", response.data.message, "success");
+            this.getProduk();
+          });
         }
       });
     },

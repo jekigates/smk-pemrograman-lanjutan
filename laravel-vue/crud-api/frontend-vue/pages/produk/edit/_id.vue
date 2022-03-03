@@ -118,10 +118,7 @@ export default {
       event.preventDefault();
 
       this.$axios
-        .put(
-          `http://127.0.0.1:8000/api/produk/${this.$route.params.id}`,
-          this.form
-        )
+        .put(`/api/produk/${this.$route.params.id}`, this.form)
         .then((response) => {
           this.$swal("Selamat!", response.data.message, "success");
         });
@@ -141,7 +138,7 @@ export default {
     },
     getData() {
       this.$axios
-        .get(`http://127.0.0.1:8000/api/produk/${this.$route.params.id}`)
+        .get(`/api/produk/${this.$route.params.id}`)
         .then((response) => {
           let user = response.data.data;
           this.form.nama = user.nama;
