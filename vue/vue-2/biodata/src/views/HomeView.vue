@@ -5,7 +5,7 @@
         <v-progress-linear color="blue" height="10" indeterminate></v-progress-linear>
       </template>
 
-      <v-img height="250" src="../assets/img/jeki.jpeg"></v-img>
+      <v-img height="250" src="@/assets/img/jeki.jpeg"></v-img>
 
       <v-card-title>Jeki Gates</v-card-title>
 
@@ -16,9 +16,9 @@
           <div class="grey--text ms-4">4.5 (413)</div>
         </v-row>
 
-        <div class="my-4 text-subtitle-1">Web Programmer</div>
+        <div class="my-4 text-subtitle-1">Web Programmer Indonesia</div>
 
-        <div>Saya adalah seorang web programmer lulusan SMK Kristen Immanuel Pontianak.</div>
+        <div>Saya lulusan SMK Kristen Immanuel Pontianak yang memiliki mimpi untuk memajukan negara dalam bidang tekonologi.</div>
       </v-card-text>
 
       <v-divider class="mx-4"></v-divider>
@@ -72,6 +72,9 @@
 <script>
 export default {
   name: "Home",
+  metaInfo: {
+    title: "Halaman Biodata",
+  },
   data: () => ({
     loading: false,
     selection: 1,
