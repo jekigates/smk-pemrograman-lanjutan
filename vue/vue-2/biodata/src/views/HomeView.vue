@@ -2,7 +2,7 @@
   <div class="d-flex justify-center">
     <v-card :loading="loading" min-width="374" max-width="374">
       <template slot="progress">
-        <v-progress-linear color="deep-purple" height="10" indeterminate></v-progress-linear>
+        <v-progress-linear color="blue" height="10" indeterminate></v-progress-linear>
       </template>
 
       <v-img height="250" src="../assets/img/jeki.jpeg"></v-img>
@@ -26,7 +26,7 @@
       <v-card-title>Jadwal Pemesanan Program</v-card-title>
 
       <v-card-text>
-        <v-chip-group v-model="selection" active-class="deep-purple accent-4 white--text" column>
+        <v-chip-group v-model="selection" active-class="blue white--text" column>
           <v-chip>17:30</v-chip>
 
           <v-chip>19:30</v-chip>
@@ -38,12 +38,15 @@
       </v-card-text>
 
       <v-card-actions>
-        <v-btn depressed color="primary">Chat</v-btn>
+        <v-btn depressed color="blue" @click="reserve" class="white--text">
+          <v-icon left> mdi-chat </v-icon>
+          Chat</v-btn
+        >
       </v-card-actions>
     </v-card>
     <v-card :loading="loading" class="ms-16" min-width="374" max-width="374">
       <template slot="progress">
-        <v-progress-linear color="deep-purple" height="10" indeterminate></v-progress-linear>
+        <v-progress-linear color="blue" height="10" indeterminate></v-progress-linear>
       </template>
 
       <v-card-title>Daftar Bahasa Dikuasai</v-card-title>
@@ -69,5 +72,17 @@
 <script>
 export default {
   name: "Home",
+  data: () => ({
+    loading: false,
+    selection: 1,
+  }),
+
+  methods: {
+    reserve() {
+      this.loading = true;
+
+      setTimeout(() => (this.loading = false), 2000);
+    },
+  },
 };
 </script>
