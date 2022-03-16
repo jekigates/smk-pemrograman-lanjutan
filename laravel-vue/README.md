@@ -33,7 +33,7 @@ Laravel
 Vue
 
 ```
-> npm run dev
+> npm run serve
 ```
 
 Pesan:
