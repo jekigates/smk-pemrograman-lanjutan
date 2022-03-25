@@ -174,7 +174,7 @@
                 <?php
               }
             ?>
-            <a href="siswa.php" class="btn btn-secondary">Reset</a>
+            <a href="mapel.php" class="btn btn-secondary">Reset</a>
           </div>
         </form>
       </div>

@@ -151,6 +151,7 @@ require "../../connection.php"; ?>
                 <td><?= $nama_pengguna ?></td>
                 <td><?= $nama_kelas ?></td>
                 <td><?= $nama_jurusan ?></td>
+                <td><?= $nama_mapel ?></td>
                 <td><?= ($jenis_kelamin == "L") ? "Laki - Laki" : "Perempuan" ?></td>
                 <td><?= $tgl_lahir ?></td>
                 <td>
