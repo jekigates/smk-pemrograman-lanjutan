@@ -91,7 +91,7 @@
       <div class="col-4">
         <nav aria-label="breadcrumb">
           <ol class="breadcrumb">
-            <li class="breadcrumb-item"><a href="../../index.php">Home</a></li>
+            <li class="breadcrumb-item"><a href="../index.php">Home</a></li>
             <li class="breadcrumb-item active" aria-current="page">Form Table Mapel</li>
           </ol>
         </nav>
@@ -145,7 +145,7 @@
                 <?php
               }
             ?>
-            <button type="reset" class="btn btn-secondary">Reset</button>
+            <a href="mapel.php" class="btn btn-secondary">Reset</a>
           </div>
         </form>
       </div>

@@ -1,5 +1,91 @@
 <?php
-require "../../connection.php"; ?>
+  require "../migrations.php";
+
+  $cmd = "create";
+
+  if (isset($_GET["cmd"])) {
+    $cmd = $_GET["cmd"];
+  } else if (isset($_POST["cmd"])) {
+    $cmd = $_POST["cmd"];
+  }
+
+  $nama_file_database = "database.txt";
+  $file_database = ""; 
+
+  $file_database = fopen($nama_file_database, "r");
+
+  $data = json_decode(file_get_contents($nama_file_database), true);
+  $data_jurusan = $data["jurusan"];
+  $data_kelas = $data["kelas"];
+  $data_siswa = $data["siswa"];
+
+  $form_data = [
+    "id_siswa" => "",
+    "nis" => "",
+    "nama_siswa" => "",
+    "id_jurusan" => "",
+    "id_kelas" => "",
+    "jenis_kelamin" => "",
+    "tgl_lahir" => "",
+  ];
+
+  fclose ($file_database);
+
+  if ($cmd == "store") {
+    $new_id_siswa = $data_siswa[count($data_siswa) - 1]["id_siswa"] + 1;
+    $form_data["id_siswa"] = intval($new_id_siswa);
+    $form_data["nis"] = intval($_POST["nis"]);
+    $form_data["nama_siswa"] = $_POST["nama_siswa"];
+    $form_data["id_jurusan"] = intval($_POST["id_jurusan"]);
+    $form_data["id_kelas"] = intval($_POST["id_kelas"]);
+    $form_data["jenis_kelamin"] = $_POST["jenis_kelamin"];
+    $form_data["tgl_lahir"] = $_POST["tgl_lahir"];
+    $file_database = fopen($nama_file_database, "w");
+    array_push($data["siswa"], $form_data);
+  } else if ($cmd == "update") {
+    $form_data["id_siswa"] = intval($_POST["id_siswa"]);
+    $form_data["nis"] = intval($_POST["nis"]);
+    $form_data["nama_siswa"] = $_POST["nama_siswa"];
+    $form_data["id_jurusan"] = intval($_POST["id_jurusan"]);
+    $form_data["id_kelas"] = intval($_POST["id_kelas"]);
+    $form_data["jenis_kelamin"] = $_POST["jenis_kelamin"];
+    $form_data["tgl_lahir"] = $_POST["tgl_lahir"];
+    $search_siswa = array_search($form_data["id_siswa"], array_column($data_siswa, "id_siswa"));
+
+    if ($search_siswa !== false) {
+      $data["siswa"][$search_siswa] = $form_data;
+    }
+  } else if ($cmd == "edit") {
+    $form_data["id_siswa"] = $_GET["id_siswa"];
+
+    $search_siswa = array_search($form_data["id_siswa"], array_column($data_siswa, "id_siswa"));
+
+    if ($search_siswa !== false) {
+      $form_data["id_siswa"] = $data_siswa[$search_siswa]["id_siswa"];
+      $form_data["nis"] = $data_siswa[$search_siswa]["nis"];
+      $form_data["nama_siswa"] = $data_siswa[$search_siswa]["nama_siswa"];
+      $form_data["id_jurusan"] = $data_siswa[$search_siswa]["id_jurusan"];
+      $form_data["id_kelas"] = $data_siswa[$search_siswa]["id_kelas"];
+      $form_data["jenis_kelamin"] = $data_siswa[$search_siswa]["jenis_kelamin"];
+      $form_data["tgl_lahir"] = $data_siswa[$search_siswa]["tgl_lahir"];
+    }
+  } else if ($cmd == "delete") {
+    $form_data["id_siswa"] = $_POST["id_siswa"];
+    
+    $search_siswa = array_search($form_data["id_siswa"], array_column($data_siswa, "id_siswa"));
+
+    if ($search_siswa !== false) {
+      array_splice($data["siswa"], $search_siswa, 1);
+    }
+  }
+
+  if ($cmd != "edit" && $cmd != "create") {
+    $file_database = fopen($nama_file_database, "w");
+    fwrite($file_database, json_encode($data, JSON_PRETTY_PRINT));
+    fclose($file_database);
+    header("Location: siswa.php");
+  }
+?>
 
 <!DOCTYPE html>
 <html lang="en">
@@ -9,7 +95,7 @@ require "../../connection.php"; ?>
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Siswa</title>
-  <link rel="stylesheet" href="../../assets/vendor/bootstrap/css/bootstrap.min.css">
+  <link rel="stylesheet" href="../assets/vendor/bootstrap/css/bootstrap.min.css">
 </head>
 
 <body>
@@ -18,7 +104,7 @@ require "../../connection.php"; ?>
       <div class="col-4">
         <nav aria-label="breadcrumb">
           <ol class="breadcrumb">
-            <li class="breadcrumb-item"><a href="../../index.php">Home</a></li>
+            <li class="breadcrumb-item"><a href="../index.php">Home</a></li>
             <li class="breadcrumb-item active" aria-current="page">Form Table Siswa</li>
           </ol>
         </nav>
@@ -26,30 +112,26 @@ require "../../connection.php"; ?>
     </div>
     <div class="row mb-4">
       <div class="col-4">
-        <form method="POST" action="./crud.php" id="form">
-          <input type="hidden" id="id_pengguna" name="id_pengguna">
+        <form method="POST" action="siswa.php" id="form">
+          <input type="hidden" id="id_siswa" name="id_siswa" value="<?= $form_data['id_siswa']; ?>">
           <div class="form-floating mb-2">
-            <input type="text" class="form-control" id="nis" name="nis" placeholder="NIS">
+            <input type="text" class="form-control" id="nis" name="nis" placeholder="NIS" value="<?= $form_data['nis']; ?>">
             <label for="nis">NIS</label>
           </div>
           <div class="form-floating mb-2">
-            <input type="text" class="form-control" id="nama_pengguna" name="nama_pengguna" placeholder="Nama Siswa">
-            <label for="nama_pengguna">Nama Siswa</label>
+            <input type="text" class="form-control" id="nama_siswa" name="nama_siswa" placeholder="Nama Siswa" value="<?= $form_data['nama_siswa']; ?>">
+            <label for="nama_siswa">Nama Siswa</label>
           </div>
           <div class="form-floating mb-2">
             <select class="form-select" id="id_jurusan" name="id_jurusan">
               <option selected value="">-- Pilih Jurusan --</option>
-              <?php
-              $sql1 = "SELECT * FROM tbjurusan";
-              $query1 = mysqli_query($conn, $sql1) or die("error: " . $sql1);
 
-              while ($result1 = mysqli_fetch_array($query1)) {
-                $id_jurusan = $result1["id_jurusan"];
-                $nama_jurusan = $result1["nama_jurusan"];
-                ?>
-                <option value="<?= $id_jurusan ?>"><?= $nama_jurusan ?></option>
-                <?php
-              }
+              <?php
+                foreach ($data_jurusan as $jurusan) {
+                  ?>
+                  <option value="<?= $jurusan['id_jurusan']; ?>" <?php if ($form_data["id_jurusan"] == $jurusan["id_jurusan"]) echo "selected" ?>><?= $jurusan["nama_jurusan"]; ?></option>
+                  <?php
+                }
               ?>
             </select>
             <label for="id_jurusan">Nama Jurusan</label>
@@ -57,17 +139,13 @@ require "../../connection.php"; ?>
           <div class="form-floating mb-2">
             <select class="form-select" id="id_kelas" name="id_kelas">
               <option selected value="">-- Pilih Kelas --</option>
-              <?php
-              $sql2 = "SELECT * FROM tbkelas";
-              $query2 = mysqli_query($conn, $sql2) or die("error: " . $sql2);
 
-              while ($result2 = mysqli_fetch_array($query2)) {
-                $id_kelas = $result2["id_kelas"];
-                $nama_kelas = $result2["nama_kelas"];
-                ?>
-                <option value="<?= $id_kelas ?>"><?= $nama_kelas ?></option>
-                <?php
-              }
+              <?php
+                foreach ($data_kelas as $kelas) {
+                  ?>
+                  <option value="<?= $kelas['id_kelas']; ?>" <?php if ($form_data["id_kelas"] == $kelas["id_kelas"]) echo "selected" ?>><?= $kelas["nama_kelas"]; ?></option>
+                  <?php
+                }
               ?>
             </select>
             <label for="id_kelas">Nama Kelas</label>
@@ -75,18 +153,28 @@ require "../../connection.php"; ?>
           <div class="form-floating mb-2">
             <select class="form-select" id="jenis_kelamin" name="jenis_kelamin">
               <option selected value="">-- Pilih Jenis Kelamin --</option>
-              <option value="L">Laki - Laki</option>
-              <option value="P">Perempuan</option>
+              <option value="L" <?php if ($form_data["jenis_kelamin"] == "L") echo "selected" ?>>Laki - Laki</option>
+              <option value="P" <?php if ($form_data["jenis_kelamin"] == "P") echo "selected" ?>>Perempuan</option>
             </select>
             <label for="jenis_kelamin">Jenis Kelamin</label>
           </div>
           <div class="form-floating mb-2">
-            <input type="date" class="form-control" id="tgl_lahir" name="tgl_lahir" placeholder="Tanggal Lahir">
+            <input type="date" class="form-control" id="tgl_lahir" name="tgl_lahir" placeholder="Tanggal Lahir" value="<?= $form_data['tgl_lahir']; ?>">
             <label for="tgl_lahir">Tanggal Lahir</label>
           </div>
           <div class="d-flex gap-2">
-            <button type="submit" class="btn btn-primary" id="btnCmd" name="cmd" value="save">Save</button>
-            <button type="reset" class="btn btn-secondary">Reset</button>
+            <?php
+              if ($cmd == "create") {
+                ?>
+                <button type="submit" class="btn btn-primary" name="cmd" value="store">Store</button>
+                <?php
+              } else if ($cmd == "edit") {
+                ?>
+                <button type="submit" class="btn btn-primary" name="cmd" value="update">Update</button>
+                <?php
+              }
+            ?>
+            <a href="siswa.php" class="btn btn-secondary">Reset</a>
           </div>
         </form>
       </div>
@@ -109,41 +197,51 @@ require "../../connection.php"; ?>
             </thead>
             <tbody>
               <?php
-              $sql1 = "SELECT * FROM tbpengguna LEFT JOIN tbsiswa ON tbpengguna.id_pengguna = tbsiswa.id_siswa LEFT JOIN tbjurusan ON tbsiswa.id_jurusan = tbjurusan.id_jurusan LEFT JOIN tbkelas ON tbsiswa.id_kelas = tbkelas.id_kelas";
-              ($query1 = mysqli_query($conn, $sql1)) or die("error: " . $sql1);
-              $iteration = 1;
+                $iteration = 1;
+                foreach ($data_siswa as $siswa) {
+                  $id_siswa = $siswa["id_siswa"];
+                  $nis = $siswa["nis"];
+                  $nama_siswa = $siswa["nama_siswa"];
+                  $id_jurusan = $siswa["id_jurusan"];
+                  $nama_jurusan = "";
+                  $id_kelas = $siswa["id_kelas"];
+                  $nama_kelas = "";
+                  $jenis_kelamin = $siswa["jenis_kelamin"];
+                  $tgl_lahir = $siswa["tgl_lahir"];
 
-              while ($result1 = mysqli_fetch_array($query1)) {
-                $id_pengguna = $result1["id_pengguna"];
-                $nis = $result1["nis"];
-                $nama_pengguna = $result1["nama_pengguna"];
-                $id_jurusan = $result1["id_jurusan"];
-                $nama_jurusan = $result1["nama_jurusan"];
-                $id_kelas = $result1["id_kelas"];
-                $nama_kelas = $result1["nama_kelas"];
-                $jenis_kelamin = $result1["jenis_kelamin"];
-                $tgl_lahir = $result1["tgl_lahir"];
-                ?>
-              <tr>
-                <th scope="row"><?= $iteration ?></th>
-                <td><?= $nis ?></td>
-                <td><?= $nama_pengguna ?></td>
-                <td><?= $nama_jurusan ?></td>
-                <td><?= $nama_kelas ?></td>
-                <td><?= ($jenis_kelamin == "L") ? "Laki - Laki" : "Perempuan" ?></td>
-                <td><?= $tgl_lahir ?></td>
-                <td>
-                  <div class="d-flex gap-2">
-                    <button class="btn btn-info" type="button" onclick="editForm(<?php echo "'$id_pengguna', '$nis', '$nama_pengguna', '$id_jurusan', '$id_kelas', '$jenis_kelamin', '$tgl_lahir'"; ?>)">Edit</button>
-                    <form action="./crud.php" method="POST" class="d-inline-block">
-                      <input type="hidden" name="id_pengguna" value="<?= $id_pengguna ?>">
-                      <button class="btn btn-danger" type="submit" onclick="return confirm('Apakah kamu yakin untuk menghapus data ini?')" name="cmd" value="delete">Delete</button>
-                    </form>
-                  </div>
-                </td>
-              </tr>
-                <?php $iteration++;
-              }
+                  $search_jurusan = array_search($id_jurusan, array_column($data_jurusan, "id_jurusan"));
+                  $search_kelas = array_search($id_kelas, array_column($data_kelas, "id_kelas"));
+
+                  if ($search_jurusan !== false) {
+                    $jurusan = $data_jurusan[$search_jurusan];
+                    $nama_jurusan = $jurusan["nama_jurusan"];
+                  }
+                  if ($search_kelas !== false) {
+                    $kelas = $data_kelas[$search_kelas];
+                    $nama_kelas = $kelas["nama_kelas"];
+                  }
+                  ?>
+                  <tr>
+                    <th scope="row"><?= $iteration; ?></th>
+                    <td><?= $nis; ?></td>
+                    <td><?= $nama_siswa; ?></td>
+                    <td><?= $nama_jurusan; ?></td>
+                    <td><?= $nama_kelas; ?></td>
+                    <td><?= $jenis_kelamin; ?></td>
+                    <td><?= $tgl_lahir; ?></td>
+                    <td>
+                      <div class="d-flex gap-2">
+                        <a href="?cmd=edit&id_siswa=<?= $id_siswa; ?>" class="btn btn-info" type="button">Edit</a>
+                        <form action="siswa.php" method="POST" class="d-inline-block">
+                          <input type="hidden" name="id_siswa" value="<?= $id_siswa; ?>">
+                          <button class="btn btn-danger" type="submit" onclick="return confirm('Apakah kamu yakin untuk menghapus data ini?')" name="cmd" value="delete">Delete</button>
+                        </form>
+                      </div>
+                    </td>
+                  </tr>
+                  <?php
+                  $iteration++;
+                }
               ?>
             </tbody>
           </table>
@@ -152,20 +250,7 @@ require "../../connection.php"; ?>
     </div>
   </div>
 
-  <script src="../../assets/vendor/bootstrap/js/bootstrap.min.js"></script>
-  <script>
-    function editForm(id_pengguna, nis, nama_pengguna, id_jurusan, id_kelas, jenis_kelamin, tgl_lahir) {
-      this.id_pengguna.value = id_pengguna;
-      this.nis.value = nis;
-      this.nama_pengguna.value = nama_pengguna;
-      this.id_jurusan.value = id_jurusan;
-      this.id_kelas.value = id_kelas;
-      this.jenis_kelamin.value = jenis_kelamin;
-      this.tgl_lahir.value = tgl_lahir;
-      this.btnCmd.value = "update";
-      this.btnCmd.innerHTML = "Update";
-    }
-  </script>
+  <script src="../assets/vendor/bootstrap/js/bootstrap.min.js"></script>
 </body>
 
 </html>
