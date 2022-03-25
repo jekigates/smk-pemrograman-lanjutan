@@ -10,9 +10,6 @@
   }
 
   $nama_file_database = "database.txt";
-  $file_database = ""; 
-
-  $file_database = fopen($nama_file_database, "r");
 
   $data = json_decode(file_get_contents($nama_file_database), true);
   $data_jurusan = $data["jurusan"];
@@ -26,15 +23,12 @@
     "id_guru" => "",
   ];
 
-  fclose ($file_database);
-
   if ($cmd == "store") {
     $new_id_mapel = $data_mapel[count($data_mapel) - 1]["id_mapel"] + 1;
     $form_data["id_mapel"] = intval($new_id_mapel);
     $form_data["nama_mapel"] = $_POST["nama_mapel"];
     $form_data["id_jurusan"] = intval($_POST["id_jurusan"]);
     $form_data["id_guru"] = intval($_POST["id_guru"]);
-    $file_database = fopen($nama_file_database, "w");
     array_push($data["mapel"], $form_data);
   } else if ($cmd == "update") {
     $form_data["id_mapel"] = intval($_POST["id_mapel"]);
@@ -67,9 +61,7 @@
   }
 
   if ($cmd != "edit" && $cmd != "create") {
-    $file_database = fopen($nama_file_database, "w");
-    fwrite($file_database, json_encode($data, JSON_PRETTY_PRINT));
-    fclose($file_database);
+    file_put_contents($nama_file_database, json_encode($data, JSON_PRETTY_PRINT));
     header("Location: mapel.php");
   }
 ?>

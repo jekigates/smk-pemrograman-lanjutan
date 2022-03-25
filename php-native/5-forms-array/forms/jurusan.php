@@ -10,9 +10,6 @@
   }
 
   $nama_file_database = "database.txt";
-  $file_database = ""; 
-
-  $file_database = fopen($nama_file_database, "r");
 
   $data = json_decode(file_get_contents($nama_file_database), true);
   $data_guru = $data["guru"];
@@ -24,14 +21,11 @@
     "id_guru" => "",
   ];
 
-  fclose ($file_database);
-
   if ($cmd == "store") {
     $new_id_jurusan = $data_jurusan[count($data_jurusan) - 1]["id_jurusan"] + 1;
     $form_data["id_jurusan"] = intval($new_id_jurusan);
     $form_data["nama_jurusan"] = $_POST["nama_jurusan"];
     $form_data["id_guru"] = intval($_POST["id_guru"]);
-    $file_database = fopen($nama_file_database, "w");
     array_push($data["jurusan"], $form_data);
   } else if ($cmd == "update") {
     $form_data["id_jurusan"] = intval($_POST["id_jurusan"]);
@@ -63,9 +57,7 @@
   }
 
   if ($cmd != "edit" && $cmd != "create") {
-    $file_database = fopen($nama_file_database, "w");
-    fwrite($file_database, json_encode($data, JSON_PRETTY_PRINT));
-    fclose($file_database);
+    file_put_contents($nama_file_database, json_encode($data, JSON_PRETTY_PRINT));
     header("Location: jurusan.php");
   }
 ?>

@@ -10,9 +10,6 @@
   }
 
   $nama_file_database = "database.txt";
-  $file_database = ""; 
-
-  $file_database = fopen($nama_file_database, "r");
 
   $data = json_decode(file_get_contents($nama_file_database), true);
   $data_jurusan = $data["jurusan"];
@@ -29,8 +26,6 @@
     "tgl_lahir" => "",
   ];
 
-  fclose ($file_database);
-
   if ($cmd == "store") {
     $new_id_siswa = $data_siswa[count($data_siswa) - 1]["id_siswa"] + 1;
     $form_data["id_siswa"] = intval($new_id_siswa);
@@ -40,7 +35,6 @@
     $form_data["id_kelas"] = intval($_POST["id_kelas"]);
     $form_data["jenis_kelamin"] = $_POST["jenis_kelamin"];
     $form_data["tgl_lahir"] = $_POST["tgl_lahir"];
-    $file_database = fopen($nama_file_database, "w");
     array_push($data["siswa"], $form_data);
   } else if ($cmd == "update") {
     $form_data["id_siswa"] = intval($_POST["id_siswa"]);
@@ -80,9 +74,7 @@
   }
 
   if ($cmd != "edit" && $cmd != "create") {
-    $file_database = fopen($nama_file_database, "w");
-    fwrite($file_database, json_encode($data, JSON_PRETTY_PRINT));
-    fclose($file_database);
+    file_put_contents($nama_file_database, json_encode($data, JSON_PRETTY_PRINT));
     header("Location: siswa.php");
   }
 ?>

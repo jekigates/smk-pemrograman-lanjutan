@@ -10,9 +10,6 @@
   }
 
   $nama_file_database = "database.txt";
-  $file_database = ""; 
-
-  $file_database = fopen($nama_file_database, "r");
 
   $data = json_decode(file_get_contents($nama_file_database), true);
   $data_jurusan = $data["jurusan"];
@@ -31,8 +28,6 @@
     "tgl_lahir" => "",
   ];
 
-  fclose ($file_database);
-
   if ($cmd == "store") {
     $new_id_guru = $data_guru[count($data_guru) - 1]["id_guru"] + 1;
     $form_data["id_guru"] = intval($new_id_guru);
@@ -43,7 +38,6 @@
     $form_data["id_mapel"] = intval($_POST["id_mapel"]);
     $form_data["jenis_kelamin"] = $_POST["jenis_kelamin"];
     $form_data["tgl_lahir"] = $_POST["tgl_lahir"];
-    $file_database = fopen($nama_file_database, "w");
     array_push($data["guru"], $form_data);
   } else if ($cmd == "update") {
     $form_data["id_guru"] = intval($_POST["id_guru"]);
@@ -85,9 +79,7 @@
   }
 
   if ($cmd != "edit" && $cmd != "create") {
-    $file_database = fopen($nama_file_database, "w");
-    fwrite($file_database, json_encode($data, JSON_PRETTY_PRINT));
-    fclose($file_database);
+    file_put_contents($nama_file_database, json_encode($data, JSON_PRETTY_PRINT));
     header("Location: guru.php");
   }
 ?>
@@ -117,7 +109,7 @@
     </div>
     <div class="row mb-4">
       <div class="col-4">
-        <form method="POST" action="./crud.php" id="form">
+        <form method="POST" action="guru.php" id="form">
           <input type="hidden" id="id_guru" name="id_guru" value="<?= $form_data['id_guru']; ?>">
           <div class="form-floating mb-2">
             <input type="text" class="form-control" id="nisn" name="nisn" placeholder="NISN" value="<?= $form_data['nisn']; ?>">
@@ -259,9 +251,9 @@
                     <td><?= $tgl_lahir; ?></td>
                     <td>
                       <div class="d-flex gap-2">
-                          <a href="?cmd=edit&id_guru=1" class="btn btn-info" type="button">Edit</a>
+                          <a href="?cmd=edit&id_guru=<?= $id_guru; ?>" class="btn btn-info" type="button">Edit</a>
                           <form action="guru.php" method="POST" class="d-inline-block">
-                            <input type="hidden" name="id_guru" value="1">
+                            <input type="hidden" name="id_guru" value="<?= $id_guru; ?>">
                             <button class="btn btn-danger" type="submit" onclick="return confirm('Apakah kamu yakin untuk menghapus data ini?')" name="cmd" value="delete">Delete</button>
                           </form>
                       </div>

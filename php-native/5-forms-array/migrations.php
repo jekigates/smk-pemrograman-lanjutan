@@ -1,7 +1,6 @@
 <?php
 
   $nama_file_database = "database.txt";
-  $file_database = ""; 
   $data = [];
   $data["jurusan"] = [
     [
@@ -88,7 +87,5 @@
   ];
 
   if (!file_exists($nama_file_database)) {
-    $file_database = fopen($nama_file_database, "w");
-    fwrite($file_database, json_encode($data, JSON_PRETTY_PRINT));
-    fclose($file_database);
+    file_put_contents($nama_file_database, json_encode($data, JSON_PRETTY_PRINT));
   }
