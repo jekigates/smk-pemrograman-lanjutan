@@ -36,9 +36,15 @@
     "mapel": [
         {
             "id_mapel": 1,
-            "nama_mapel": "IPA",
+            "nama_mapel": "Matematika",
             "id_jurusan": 1,
             "id_guru": 1
+        },
+        {
+            "id_mapel": 2,
+            "nama_mapel": "IPA",
+            "id_jurusan": 2,
+            "id_guru": 2
         }
     ]
 }
