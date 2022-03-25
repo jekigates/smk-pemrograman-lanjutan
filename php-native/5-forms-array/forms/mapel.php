@@ -1,0 +1,271 @@
+<?php
+  $cmd = "create";
+
+  if (isset($_GET["cmd"])) {
+    $cmd = $_GET["cmd"];
+  } else if (isset($_POST["cmd"])) {
+    $cmd = $_POST["cmd"];
+  }
+
+  $nama_file_database = "database.txt";
+  $file_database = ""; 
+  $data = [];
+  $data["jurusan"] = [
+    [
+      "id_jurusan" => 1,
+      "nama_jurusan" => "Teknik Komputer dan Jaringan",
+      "id_guru" => "",
+    ],
+    [
+      "id_jurusan" => 2,
+      "nama_jurusan" => "Akuntansi",
+      "id_guru" => "",
+    ],
+  ];
+  $data["guru"] = [
+    [
+      "id_guru" => 1,
+      "nama_guru" => "Jeki Gates",
+      "jenis_kelamin" => "L",
+      "tgl_lahir" => "2004-07-17",
+      "nisn" => 123,
+      "id_kelas" => "",
+      "id_jurusan" => 1,
+      "id_mapel" => "",
+    ],
+    [
+      "id_guru" => 2,
+      "nama_guru" => "Gilbert Liau",
+      "jenis_kelamin" => "P",
+      "tgl_lahir" => "2004-08-20",
+      "nisn" => 456,
+      "id_kelas" => "",
+      "id_jurusan" => 2,
+      "id_mapel" => "",
+    ],
+  ];
+    $data["mapel"] = [
+    [
+      "id_mapel" => 1,
+      "nama_mapel" => "Matematika",
+      "id_jurusan" => 1,
+      "id_guru" => 1,
+    ],
+    [
+      "id_mapel" => 2,
+      "nama_mapel" => "IPA",
+      "id_jurusan" => 2,
+      "id_guru" => 2,
+    ],
+  ];
+
+  if (!file_exists($nama_file_database)) {
+    $file_database = fopen($nama_file_database, "w");
+    fwrite($file_database, json_encode($data, JSON_PRETTY_PRINT));
+    fclose($file_database);
+  }
+
+  $file_database = fopen($nama_file_database, "r");
+
+  $data = json_decode(file_get_contents($nama_file_database), true);
+  $data_jurusan = $data["jurusan"];
+  $data_guru = $data["guru"];
+  $data_mapel = $data["mapel"];
+
+  $form_data = [
+    "id_mapel" => "",
+    "nama_mapel" => "",
+    "id_jurusan" => "",
+    "id_guru" => "",
+  ];
+
+  fclose ($file_database);
+
+  if ($cmd == "store") {
+    $new_id_mapel = $data_mapel[count($data_mapel) - 1]["id_mapel"] + 1;
+    $form_data["id_mapel"] = intval($new_id_mapel);
+    $form_data["nama_mapel"] = $_POST["nama_mapel"];
+    $form_data["id_jurusan"] = intval($_POST["id_jurusan"]);
+    $form_data["id_guru"] = intval($_POST["id_guru"]);
+    $file_database = fopen($nama_file_database, "w");
+    array_push($data["mapel"], $form_data);
+  } else if ($cmd == "update") {
+    $form_data["id_mapel"] = intval($_POST["id_mapel"]);
+    $form_data["nama_mapel"] = $_POST["nama_mapel"];
+    $form_data["id_jurusan"] = intval($_POST["id_jurusan"]);
+    $form_data["id_guru"] = intval($_POST["id_guru"]);
+    $search_mapel = array_search($form_data["id_mapel"], array_column($data_mapel, "id_mapel"));
+
+    if ($search_mapel !== false) {
+      $data["mapel"][$search_mapel] = $form_data;
+    }
+  } else if ($cmd == "edit") {
+    $form_data["id_mapel"] = $_GET["id_mapel"];
+
+    $search_mapel = array_search($form_data["id_mapel"], array_column($data_mapel, "id_mapel"));
+
+    if ($search_mapel !== false) {
+      $form_data["nama_mapel"] = $data_mapel[$search_mapel]["nama_mapel"];
+      $form_data["id_jurusan"] = $data_mapel[$search_mapel]["id_jurusan"];
+      $form_data["id_guru"] = $data_mapel[$search_mapel]["id_guru"];
+    }
+  } else if ($cmd == "delete") {
+    $form_data["id_mapel"] = $_POST["id_mapel"];
+    
+    $search_mapel = array_search($form_data["id_mapel"], array_column($data_mapel, "id_mapel"));
+
+    if ($search_mapel !== false) {
+      array_splice($data["mapel"], $search_mapel, 1);
+    }
+  }
+
+  if ($cmd != "edit" && $cmd != "create") {
+    $file_database = fopen($nama_file_database, "w");
+    fwrite($file_database, json_encode($data, JSON_PRETTY_PRINT));
+    fclose($file_database);
+    header("Location: mapel.php");
+  }
+?>
+
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Mapel</title>
+  <link rel="stylesheet" href="../assets/vendor/bootstrap/css/bootstrap.min.css">
+</head>
+
+<body>
+  <div class="container-fluid p-5">
+    <div class="row mb-2">
+      <div class="col-4">
+        <nav aria-label="breadcrumb">
+          <ol class="breadcrumb">
+            <li class="breadcrumb-item"><a href="../../index.php">Home</a></li>
+            <li class="breadcrumb-item active" aria-current="page">Form Table Mapel</li>
+          </ol>
+        </nav>
+      </div>
+    </div>
+    <div class="row mb-4">
+      <div class="col-4">
+        <form method="POST" action="mapel.php" id="form">
+          <input type="hidden" id="id_mapel" name="id_mapel" value="<?= $form_data['id_mapel']; ?>">
+          <div class="form-floating mb-2">
+            <input type="text" class="form-control" id="nama_mapel" name="nama_mapel" placeholder="Nama Mapel" value="<?= $form_data['nama_mapel']; ?>">
+            <label for="nama_mapel">Nama Mapel</label>
+          </div>
+          <div class="form-floating mb-2">
+            <select class="form-select" id="id_jurusan" name="id_jurusan">
+              <option selected value="">-- Pilih Jurusan --</option>
+
+              <?php
+                foreach ($data_jurusan as $jurusan) {
+                  ?>
+                  <option value="<?= $jurusan['id_jurusan']; ?>" <?php if ($form_data["id_jurusan"] == $jurusan["id_jurusan"]) echo "selected" ?>><?= $jurusan["nama_jurusan"]; ?></option>
+                  <?php
+                }
+              ?>
+            </select>
+            <label for="id_jurusan">Nama Jurusan</label>
+          </div>
+          <div class="form-floating mb-2">
+            <select class="form-select" id="id_guru" name="id_guru">
+              <option selected value="">-- Pilih Guru --</option>
+
+              <?php
+                foreach ($data_guru as $guru) {
+                  ?>
+                  <option value="<?= $guru['id_guru']; ?>" <?php if ($form_data["id_guru"] == $guru["id_guru"]) echo "selected" ?>><?= $guru["nama_guru"]; ?></option>
+                  <?php
+                }
+              ?>
+            </select>
+            <label for="id_kelas">Nama Guru</label>
+          </div>
+          <div class="d-flex gap-2">
+            <?php
+              if ($cmd == "create") {
+                ?>
+                <button type="submit" class="btn btn-primary" name="cmd" value="store">Store</button>
+                <?php
+              } else if ($cmd == "edit") {
+                ?>
+                <button type="submit" class="btn btn-primary" name="cmd" value="update">Update</button>
+                <?php
+              }
+            ?>
+            <button type="reset" class="btn btn-secondary">Reset</button>
+          </div>
+        </form>
+      </div>
+    </div>
+    <div class="row">
+      <div class="col-12">
+        <div class="table-responsive">
+          <table class="table table-striped align-middle">
+            <thead class="table-dark">
+              <tr>
+                <th scope="col">#</th>
+                <th scope="col">Nama Mapel</th>
+                <th scope="col">Nama Jurusan</th>
+                <th scope="col">Nama Guru</th>
+                <th scope="col">Action</th>
+              </tr>
+            </thead>
+            <tbody>
+              <?php
+                $iteration = 1;
+                foreach ($data_mapel as $mapel) {
+                  $id_mapel = $mapel["id_mapel"];
+                  $nama_mapel = $mapel["nama_mapel"];
+                  $id_jurusan = $mapel["id_jurusan"];
+                  $nama_jurusan = "";
+                  $id_guru = $mapel["id_guru"];
+                  $nama_guru = "";
+
+                  $search_jurusan = array_search($id_jurusan, array_column($data_jurusan, "id_jurusan"));
+                  $search_guru = array_search($id_guru, array_column($data_guru, "id_guru"));
+
+                  if ($search_jurusan !== false) {
+                    $jurusan = $data_jurusan[$search_jurusan];
+                    $nama_jurusan = $jurusan["nama_jurusan"];
+                  }
+                  if ($search_guru !== false) {
+                    $guru = $data_guru[$search_guru];
+                    $nama_guru = $guru["nama_guru"];
+                  }
+                  ?>
+                  <tr>
+                    <th scope="row"><?= $iteration; ?></th>
+                    <td><?= $nama_mapel; ?></td>
+                    <td><?= $nama_jurusan; ?></td>
+                    <td><?= $nama_guru; ?></td>
+                    <td>
+                      <div class="d-flex gap-2">
+                        <a href="?cmd=edit&id_mapel=<?= $id_mapel; ?>" class="btn btn-info" type="button">Edit</a>
+                        <form action="mapel.php" method="POST" class="d-inline-block">
+                          <input type="hidden" name="id_mapel" value="<?= $id_mapel; ?>">
+                          <button class="btn btn-danger" type="submit" onclick="return confirm('Apakah kamu yakin untuk menghapus data ini?')" name="cmd" value="delete">Delete</button>
+                        </form>
+                      </div>
+                    </td>
+                  </tr>
+                  <?php
+                  $iteration++;
+                }
+              ?>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script src="../assets/vendor/bootstrap/js/bootstrap.min.js"></script>
+</body>
+
+</html>
