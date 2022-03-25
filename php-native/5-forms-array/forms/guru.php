@@ -248,26 +248,26 @@
                     $nama_mapel = $mapel["nama_mapel"];
                   }
                   ?>
-                <tr>
-                  <th scope="row"><?= $iteration; ?></th>
-                  <td><?= $nisn; ?></td>
-                  <td><?= $nama_guru; ?></td>
-                  <td><?= $nama_kelas; ?></td>
-                  <td><?= $nama_jurusan; ?></td>
-                  <td><?= $nama_mapel; ?></td>
-                  <td><?= $jenis_kelamin; ?></td>
-                  <td><?= $tgl_lahir; ?></td>
-                  <td>
-                    <div class="d-flex gap-2">
-                        <a href="?cmd=edit&id_guru=1" class="btn btn-info" type="button">Edit</a>
-                        <form action="guru.php" method="POST" class="d-inline-block">
-                          <input type="hidden" name="id_guru" value="1">
-                          <button class="btn btn-danger" type="submit" onclick="return confirm('Apakah kamu yakin untuk menghapus data ini?')" name="cmd" value="delete">Delete</button>
-                        </form>
-                    </div>
-                  </td>
-                </tr>
-                <?php
+                  <tr>
+                    <th scope="row"><?= $iteration; ?></th>
+                    <td><?= $nisn; ?></td>
+                    <td><?= $nama_guru; ?></td>
+                    <td><?= $nama_kelas; ?></td>
+                    <td><?= $nama_jurusan; ?></td>
+                    <td><?= $nama_mapel; ?></td>
+                    <td><?= $jenis_kelamin; ?></td>
+                    <td><?= $tgl_lahir; ?></td>
+                    <td>
+                      <div class="d-flex gap-2">
+                          <a href="?cmd=edit&id_guru=1" class="btn btn-info" type="button">Edit</a>
+                          <form action="guru.php" method="POST" class="d-inline-block">
+                            <input type="hidden" name="id_guru" value="1">
+                            <button class="btn btn-danger" type="submit" onclick="return confirm('Apakah kamu yakin untuk menghapus data ini?')" name="cmd" value="delete">Delete</button>
+                          </form>
+                      </div>
+                    </td>
+                  </tr>
+                  <?php
                   $iteration++;
                 }
               ?>

@@ -7,12 +7,12 @@
     [
       "id_jurusan" => 1,
       "nama_jurusan" => "Teknik Komputer dan Jaringan",
-      "id_guru" => "",
+      "id_guru" => 1,
     ],
     [
       "id_jurusan" => 2,
       "nama_jurusan" => "Akuntansi",
-      "id_guru" => "",
+      "id_guru" => 2,
     ],
   ];
   $data["guru"] = [

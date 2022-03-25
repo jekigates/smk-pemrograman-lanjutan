@@ -1,3 +1,75 @@
+<?php
+  require "../migrations.php";
+
+  $cmd = "create";
+
+  if (isset($_GET["cmd"])) {
+    $cmd = $_GET["cmd"];
+  } else if (isset($_POST["cmd"])) {
+    $cmd = $_POST["cmd"];
+  }
+
+  $nama_file_database = "database.txt";
+  $file_database = ""; 
+
+  $file_database = fopen($nama_file_database, "r");
+
+  $data = json_decode(file_get_contents($nama_file_database), true);
+  $data_guru = $data["guru"];
+  $data_kelas = $data["kelas"];
+
+  $form_data = [
+    "id_kelas" => "",
+    "nama_kelas" => "",
+    "id_guru" => "",
+  ];
+
+  fclose ($file_database);
+
+  if ($cmd == "store") {
+    $new_id_kelas = $data_kelas[count($data_kelas) - 1]["id_kelas"] + 1;
+    $form_data["id_kelas"] = intval($new_id_kelas);
+    $form_data["nama_kelas"] = $_POST["nama_kelas"];
+    $form_data["id_guru"] = intval($_POST["id_guru"]);
+    $file_database = fopen($nama_file_database, "w");
+    array_push($data["kelas"], $form_data);
+  } else if ($cmd == "update") {
+    $form_data["id_kelas"] = intval($_POST["id_kelas"]);
+    $form_data["nama_kelas"] = $_POST["nama_kelas"];
+    $form_data["id_guru"] = intval($_POST["id_guru"]);
+    $search_kelas = array_search($form_data["id_kelas"], array_column($data_kelas, "id_kelas"));
+
+    if ($search_kelas !== false) {
+      $data["kelas"][$search_kelas] = $form_data;
+    }
+  } else if ($cmd == "edit") {
+    $form_data["id_kelas"] = $_GET["id_kelas"];
+
+    $search_kelas = array_search($form_data["id_kelas"], array_column($data_kelas, "id_kelas"));
+
+    if ($search_kelas !== false) {
+      $form_data["id_kelas"] = $data_kelas[$search_kelas]["id_kelas"];
+      $form_data["nama_kelas"] = $data_kelas[$search_kelas]["nama_kelas"];
+      $form_data["id_guru"] = $data_kelas[$search_kelas]["id_guru"];
+    }
+  } else if ($cmd == "delete") {
+    $form_data["id_kelas"] = $_POST["id_kelas"];
+    
+    $search_kelas = array_search($form_data["id_kelas"], array_column($data_kelas, "id_kelas"));
+
+    if ($search_kelas !== false) {
+      array_splice($data["kelas"], $search_kelas, 1);
+    }
+  }
+
+  if ($cmd != "edit" && $cmd != "create") {
+    $file_database = fopen($nama_file_database, "w");
+    fwrite($file_database, json_encode($data, JSON_PRETTY_PRINT));
+    fclose($file_database);
+    header("Location: kelas.php");
+  }
+?>
+
 <!DOCTYPE html>
 <html lang="en">
 
@@ -23,21 +95,39 @@
     </div>
     <div class="row mb-4">
       <div class="col-4">
-        <form method="POST" action="./crud.php" id="form">
-          <input type="hidden" id="id_kelas" name="id_kelas">
+        <form method="POST" action="kelas.php" id="form">
+          <input type="hidden" id="id_kelas" name="id_kelas" value="<?= $form_data['id_kelas']; ?>">
           <div class="form-floating mb-2">
-            <input type="text" class="form-control" id="nama_kelas" name="nama_kelas" placeholder="Nama Kelas">
+            <input type="text" class="form-control" id="nama_kelas" name="nama_kelas" placeholder="Nama Kelas" value="<?= $form_data['nama_kelas']; ?>">
             <label for="nama_kelas">Nama Kelas</label>
           </div>
           <div class="form-floating mb-2">
-            <select class="form-select" id="id_pengguna" name="id_pengguna">
+            <select class="form-select" id="id_guru" name="id_guru">
               <option selected value="">-- Pilih Guru --</option>
+
+              <?php
+                foreach ($data_guru as $guru) {
+                  ?>
+                  <option value="<?= $guru['id_guru']; ?>" <?php if ($form_data["id_guru"] == $guru["id_guru"]) echo "selected" ?>><?= $guru["nama_guru"]; ?></option>
+                  <?php
+                }
+              ?>
             </select>
             <label for="id_kelas">Nama Guru</label>
           </div>
           <div class="d-flex gap-2">
-            <button type="submit" class="btn btn-primary" id="btnCmd" name="cmd" value="save">Save</button>
-            <button type="reset" class="btn btn-secondary">Reset</button>
+            <?php
+              if ($cmd == "create") {
+                ?>
+                <button type="submit" class="btn btn-primary" name="cmd" value="store">Store</button>
+                <?php
+              } else if ($cmd == "edit") {
+                ?>
+                <button type="submit" class="btn btn-primary" name="cmd" value="update">Update</button>
+                <?php
+              }
+            ?>
+            <a href="kelas.php" class="btn btn-secondary">Reset</a>
           </div>
         </form>
       </div>
@@ -55,20 +145,39 @@
               </tr>
             </thead>
             <tbody>
-              <tr>
-                <th scope="row">1</th>
-                <td>Nama Kelas</td>
-                <td>Nama Pengguna</td>
-                <td>
-                  <div class="d-flex gap-2">
-                      <a href="?cmd=edit&id_kelas=1" class="btn btn-info" type="button">Edit</a>
-                      <form action="kelas.php" method="POST" class="d-inline-block">
-                        <input type="hidden" name="id_kelas" value="1">
-                        <button class="btn btn-danger" type="submit" onclick="return confirm('Apakah kamu yakin untuk menghapus data ini?')" name="cmd" value="delete">Delete</button>
-                      </form>
-                  </div>
-                </td>
-              </tr>
+              <?php
+                $iteration = 1;
+                foreach ($data_kelas as $kelas) {
+                  $id_kelas = $kelas["id_kelas"];
+                  $nama_kelas = $kelas["nama_kelas"];
+                  $id_guru = $kelas["id_guru"];
+                  $nama_guru = "";
+
+                  $search_guru = array_search($id_guru, array_column($data_guru, "id_guru"));
+
+                  if ($search_guru !== false) {
+                    $guru = $data_guru[$search_guru];
+                    $nama_guru = $guru["nama_guru"];
+                  }
+                  ?>
+                  <tr>
+                    <th scope="row"><?= $iteration; ?></th>
+                    <td><?= $nama_kelas; ?></td>
+                    <td><?= $nama_guru; ?></td>
+                    <td>
+                      <div class="d-flex gap-2">
+                          <a href="?cmd=edit&id_kelas=<?= $id_kelas; ?>" class="btn btn-info" type="button">Edit</a>
+                          <form action="kelas.php" method="POST" class="d-inline-block">
+                            <input type="hidden" name="id_kelas" value="<?= $id_kelas; ?>">
+                            <button class="btn btn-danger" type="submit" onclick="return confirm('Apakah kamu yakin untuk menghapus data ini?')" name="cmd" value="delete">Delete</button>
+                          </form>
+                      </div>
+                    </td>
+                  </tr>
+                  <?php
+                  $iteration++;
+                }
+              ?>
             </tbody>
           </table>
         </div>
