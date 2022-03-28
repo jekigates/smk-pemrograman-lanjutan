@@ -1,0 +1,127 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Login</title>
+    <link rel="icon" href="./assets/img/favicon.ico" />
+    <link rel="stylesheet" href="./assets/vendor/bootstrap/css/bootstrap.min.css" />
+  </head>
+  <style>
+    html,
+    body {
+      height: 100%;
+    }
+
+    body {
+      display: flex;
+      align-items: center;
+      padding-top: 40px;
+      padding-bottom: 40px;
+      background-color: #f5f5f5;
+    }
+
+    .form-login {
+      width: 100%;
+      max-width: 330px;
+      padding: 15px;
+      margin: auto;
+    }
+
+    .form-login .checkbox {
+      font-weight: 400;
+    }
+
+    .form-login .form-floating:focus-within {
+      z-index: 2;
+    }
+
+    .form-login input[type="email"] {
+      margin-bottom: -1px;
+      border-bottom-right-radius: 0;
+      border-bottom-left-radius: 0;
+    }
+
+    .form-login input[type="password"] {
+      margin-bottom: 10px;
+      border-top-left-radius: 0;
+      border-top-right-radius: 0;
+    }
+  </style>
+  <body class="text-center">
+    <main class="form-login">
+      <form id="form_login" onsubmit="login(event)">
+        <img class="mb-4" src="./assets/img/bootstrap-logo.svg" alt="" width="72" height="57" />
+        <h1 class="h3 mb-3 fw-normal">Please login</h1>
+
+        <div class="form-floating">
+          <input type="email" class="form-control" id="email" name="email" placeholder="Email" required />
+          <label for="email">Email address</label>
+        </div>
+        <div class="form-floating">
+          <input type="password" class="form-control" id="password" name="password" placeholder="Password" required />
+          <label for="password">Password</label>
+        </div>
+
+        <button class="w-100 btn btn-lg btn-primary" type="submit">Login</button>
+        <a href="./register.html" class="d-inline-block link-primary mt-5 mb-3">Tidak punya akun? Register</a>
+      </form>
+    </main>
+
+    <script src="./assets/vendor/bootstrap/js/bootstrap.min.js"></script>
+    <script>
+      const login = function (e) {
+        e.preventDefault();
+
+        // cara dengan daftar isi FormData dari Form
+        var formData = new FormData(this.form_login);
+
+        // cara dengan daftar isi FormData secara manual
+        // var formData = new FormData();
+        // formData.set("email", this.email.value);
+        // formData.set("password", this.password.value);
+
+        fetch("crud.php?cmd=login", {
+          method: "POST",
+          body: formData,
+        })
+          .then((res) => res.json())
+          .then((data) => {
+            if (data.message === "Success") {
+              alert(`Selamat datang, ${data.data.nama}!`);
+              location.href = "home.php";
+            } else {
+              alert("Maaf, email atau password Anda salah.");
+            }
+          });
+      };
+
+      // const login = function (e) {
+      //   e.preventDefault();
+
+      //   // cara dengan daftar isi FormData dari Form
+      //   var formData = new FormData(this.form_login);
+
+      //   // cara dengan daftar isi FormData secara manual
+      //   // var formData = new FormData();
+      //   // formData.set("email", this.email.value);
+      //   // formData.set("password", this.password.value);
+
+      //   fetch("crud.php?cmd=login", {
+      //     method: "POST",
+      //     body: formData,
+      //   })
+      //     .then((res) => res.json())
+      //     .then((data) => {
+      //       if (data.message === "Success") {
+      //         alert(`Selamat datang, ${data.data.nama}!`);
+      //         location.href = "home.php";
+      //       } else {
+      //         alert("Maaf, email atau password Anda salah.");
+      //       }
+      //     });
+      // };
+    </script>
+  </body>
+</html>
