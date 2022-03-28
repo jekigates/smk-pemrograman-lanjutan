@@ -109,7 +109,7 @@
           </div>
           <div class="d-flex gap-2">
             <?php
-              if ($cmd == "create") {
+              if ($cmd == "create") { 
                 ?>
                 <button type="submit" class="btn btn-primary" name="cmd" value="store">Store</button>
                 <?php
