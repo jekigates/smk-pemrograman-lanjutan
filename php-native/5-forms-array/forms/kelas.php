@@ -9,7 +9,7 @@
     $cmd = $_POST["cmd"];
   }
 
-  $nama_file_database = "database.txt";
+  $nama_file_database = getNamaFileDatabase();
 
   $data = json_decode(file_get_contents($nama_file_database), true);
   $data_guru = $data["guru"];

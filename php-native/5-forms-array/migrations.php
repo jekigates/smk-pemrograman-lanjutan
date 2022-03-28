@@ -1,6 +1,7 @@
 <?php
+  require "functions.php";
 
-  $nama_file_database = "database.txt";
+  $nama_file_database = getNamaFileDatabase();
   $data = [];
   $data["jurusan"] = [
     [

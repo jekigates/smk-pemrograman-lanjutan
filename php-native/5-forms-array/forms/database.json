@@ -13,14 +13,24 @@
     ],
     "guru": [
         {
-            "id_guru": 2,
-            "nisn": 123,
+            "id_guru": 1,
             "nama_guru": "Jeki Gates",
-            "id_jurusan": 2,
-            "id_kelas": 2,
-            "id_mapel": 2,
+            "jenis_kelamin": "L",
+            "tgl_lahir": "2004-07-17",
+            "nisn": 123,
+            "id_kelas": 1,
+            "id_jurusan": 1,
+            "id_mapel": 1
+        },
+        {
+            "id_guru": 2,
+            "nama_guru": "Gilbert Liau",
             "jenis_kelamin": "P",
-            "tgl_lahir": "2022-03-23"
+            "tgl_lahir": "2004-08-20",
+            "nisn": 456,
+            "id_kelas": 2,
+            "id_jurusan": 2,
+            "id_mapel": 2
         }
     ],
     "mapel": [
