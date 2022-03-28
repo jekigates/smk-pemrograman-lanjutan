@@ -1,0 +1,161 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>CRUD</title>
+    <link rel="icon" href="./assets/img/favicon.ico" />
+    <link rel="stylesheet" href="./assets/vendor/bootstrap/css/bootstrap.min.css" />
+  </head>
+  <body>
+    <div class="container-fluid p-4">
+      <div class="row mb-4">
+        <div class="col-4">
+          <form action="" method="POST" id="formCRUD">
+            <input type="hidden" id="id" name="id" />
+            <h2 class="mb-4">CRUD Todo</h2>
+            <div class="form-floating mb-3">
+              <input type="text" class="form-control" id="nama" placeholder="Nama" />
+              <label for="nama">Nama</label>
+            </div>
+            <div class="flex">
+              <button type="submit" class="btn btn-primary" name="cmd" value="store" id="btnCMD">Store</button>
+              <button type="reset" class="btn btn-secondary" name="" id="btnReset" onclick="resetForm()">Reset</button>
+            </div>
+          </form>
+        </div>
+      </div>
+      <div class="row">
+        <div class="col-6">
+          <div class="table-responsive">
+            <table class="table">
+              <thead>
+                <tr class="table-dark">
+                  <th>No</th>
+                  <th>Nama</th>
+                  <th>Action</th>
+                </tr>
+              </thead>
+              <tbody id="tableCRUD"></tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <script src="./assets/vendor/bootstrap/js/bootstrap.min.js"></script>
+    <script>
+      var formCRUD = document.getElementById("formCRUD");
+      var tableCRUD = document.getElementById("tableCRUD");
+      var id = document.getElementById("id");
+      var nama = document.getElementById("nama");
+      var btnCMD = document.getElementById("btnCMD");
+
+      window.onload = () => {
+        loadItemTodo();
+      };
+
+      function resetForm() {
+        id.value = "";
+        nama.value = "";
+        if (btnCMD.value == "update") {
+          btnCMD.innerHTML = "Store";
+          btnCMD.value = "store";
+          btnCMD.classList.remove("btn-info");
+          btnCMD.classList.add("btn-primary");
+        }
+      }
+
+      function updateItemTodo() {
+        var todo = JSON.parse(localStorage.getItem("todo"));
+
+        todo = todo.map((el) => (el.id == id.value ? { ...el, nama: nama.value } : el));
+
+        localStorage.setItem("todo", JSON.stringify(todo));
+        alert("Data todo berhasil diperbarui.");
+        resetForm();
+        loadItemTodo();
+      }
+
+      function editItemTodo(id, nama) {
+        resetForm();
+        this.id.value = id;
+        this.nama.value = nama;
+        btnCMD.innerHTML = "Update";
+        btnCMD.value = "update";
+        btnCMD.classList.remove("btn-primary");
+        btnCMD.classList.add("btn-info");
+      }
+
+      function deleteItemTodo(id) {
+        var todo = JSON.parse(localStorage.getItem("todo"));
+        var deleteIndexTodo = todo.findIndex((el) => el.id === id);
+
+        todo.splice(deleteIndexTodo, 1);
+        localStorage.setItem("todo", JSON.stringify(todo));
+        alert("Berhasil menghapus data todo.");
+        loadItemTodo();
+      }
+
+      function loadItemTodo() {
+        checkItemTodo();
+
+        var todo = JSON.parse(localStorage.getItem("todo"));
+
+        tableCRUD.innerHTML = "";
+        todo.forEach((el, i) => {
+          tableCRUD.innerHTML += `<tr>
+            <td>${i + 1}</td>
+            <td>${el.nama}</td>
+            <td>
+              <div class="d-flex">
+                <button type="button" class="btn btn-info me-2" onclick="editItemTodo(${el.id}, '${el.nama}')">Edit</button>
+                <button type="button" class="btn btn-danger" onclick="deleteItemTodo(${el.id})">Delete</button>
+              </div>
+            </td>
+          </tr>`;
+        });
+      }
+
+      function checkItemTodo() {
+        if (localStorage.getItem("todo") == null) {
+          localStorage.setItem("todo", JSON.stringify([]));
+        }
+      }
+
+      function storeItemTodo() {
+        var data = {
+          id: generateIdItemTodo(),
+          nama: nama.value,
+        };
+        var todo = JSON.parse(localStorage.getItem("todo"));
+        todo.push(data);
+
+        localStorage.setItem("todo", JSON.stringify(todo));
+        alert("Berhasil menambahkan todo baru.");
+        resetForm();
+        loadItemTodo();
+      }
+
+      formCRUD.onsubmit = (e) => {
+        e.preventDefault();
+        if (btnCMD.value == "store") {
+          storeItemTodo();
+        } else {
+          updateItemTodo();
+        }
+      };
+
+      function generateIdItemTodo() {
+        var todo = JSON.parse(localStorage.getItem("todo"));
+
+        if (todo.length == 0) {
+          return 1;
+        } else {
+          return todo[todo.length - 1].id + 1;
+        }
+      }
+    </script>
+  </body>
+</html>
