@@ -71,6 +71,29 @@
 
     <script src="./assets/vendor/bootstrap/js/bootstrap.min.js"></script>
     <script>
+      // const login = function (e) {
+      //   e.preventDefault();
+
+      //   var url = "crud.php?cmd=login";
+      //   var xhttp = window.XMLHttpRequest ? new XMLHttpRequest() : new ActiveXObject("Microsoft.XMLHTTP");
+
+      //   xhttp.onload = function () {
+      //     if (this.status === 200) {
+      //       var data = JSON.parse(this.responseText);
+
+      //       if (data.message === "Success") {
+      //         alert(`Selamat datang, ${data.data.nama}!`);
+      //         location.href = "home.php";
+      //       } else {
+      //         alert("Maaf, email atau password Anda salah.");
+      //       }
+      //     }
+      //   };
+      //   xhttp.open("POST", url, true);
+      //   xhttp.setRequestHeader("Content-type", "application/x-www-form-urlencoded"); // perlu ini agar method POST berjalan dengan baik
+      //   xhttp.send(`email=${this.email.value}&password=${this.password.value}`);
+      // };
+
       const login = function (e) {
         e.preventDefault();
 
@@ -96,32 +119,6 @@
             }
           });
       };
-
-      // const login = function (e) {
-      //   e.preventDefault();
-
-      //   // cara dengan daftar isi FormData dari Form
-      //   var formData = new FormData(this.form_login);
-
-      //   // cara dengan daftar isi FormData secara manual
-      //   // var formData = new FormData();
-      //   // formData.set("email", this.email.value);
-      //   // formData.set("password", this.password.value);
-
-      //   fetch("crud.php?cmd=login", {
-      //     method: "POST",
-      //     body: formData,
-      //   })
-      //     .then((res) => res.json())
-      //     .then((data) => {
-      //       if (data.message === "Success") {
-      //         alert(`Selamat datang, ${data.data.nama}!`);
-      //         location.href = "home.php";
-      //       } else {
-      //         alert("Maaf, email atau password Anda salah.");
-      //       }
-      //     });
-      // };
     </script>
   </body>
 </html>
